@@ -27,7 +27,7 @@ subfolder_VOD = 'Vegetation_Optical_Depth/VODCA/0.1deg/VODCA_Xband_A';
 latlim = [-90,90];
 lonlim = [-180,180];
 rasterSize = [720,1440];
-RA = georefcells(latlim,lonlim,rasterSize,'ColumnsStartFrom','north');
+% RA = georefcells(latlim,lonlim,rasterSize,'ColumnsStartFrom','north');
 
 % Load soil type
 Soilraster = load('inpara/Soilraster.mat');
@@ -59,7 +59,6 @@ for yr = 1982 : 2020
         waa = 0.25 .* ones(r_m, r_n, 3); % initial value for swc
         zgww = 5050 .* ones(r_m, r_n); % initial value for groundwater table
         snpp = zeros(r_m, r_n); % initial value for snowpack depth
-
         % load the updated variables
         % uptval = load('upt_vals_01_backup.mat');
         % uptval = uptval.X_upt;
@@ -126,11 +125,9 @@ for yr = 1982 : 2020
     % Days of selected year
     days = yeardays(yr);
 
-
     % ------------------ %
     % Parallel Computing %
     % ------------------ %
-
     disp('Preallocate memory to each variables ... ')
     % 10 variables
     X_ET  = zeros(r_m, r_n, days,'double');
@@ -149,7 +146,6 @@ for yr = 1982 : 2020
 
     ppm = ParforProgressbar(r_m, 'showWorkerProgress', false);
     parfor i = 1 : r_m
-        
         % read each row, (latitude)
         Rnix = permute(EMO_Rn(i, :, :), [3, 2, 1]);
         Taix = permute(EMO_Ta(i, :, :), [3, 2, 1]);
@@ -163,7 +159,6 @@ for yr = 1982 : 2020
         X_upti = zeros(1, r_n, 5); % intermediate
 
         for j = 1 : r_n
-            
             % check landmask
             if maskland(i, j) == 0
                 continue
@@ -262,7 +257,6 @@ for yr = 1982 : 2020
     end
 
     % toc
-    % Delete the progress handle when the parfor loop is done.
     delete(ppm);
 
     % save update variables to current folder
