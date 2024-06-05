@@ -1,6 +1,4 @@
-% -------------------------- %
 %  Interception evaporation  %
-% -------------------------- %
 function [Ei,wetT,Pe] = interception(pEc,LAI,Rain,pftpar)
 % -INPUT:
 % pEc    : potnetial Evaporation on canopy

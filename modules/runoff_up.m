@@ -1,4 +1,3 @@
-%      Runoff     %
 function [srf, IWS, Vmax] = runoff_up(Pnet, zgw, zm, wa, soilpar)
 % ---INPUT:
 % zm       : Soil depth of different layers

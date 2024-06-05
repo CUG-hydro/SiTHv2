@@ -84,9 +84,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     end
 
     % ====== water consumption ====== %
-
     %% Evapotranspiration %
-
     % distributed the potential Tr to different layers
     [Tr_p1, Tr_p2, Tr_p3] = pTr_partition(pEc, wa1, wa2, wa3, soilpar, pftpar, wet, zm);
 
@@ -122,21 +120,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
         Es = d1 * wa1 - Tr1;
     end
 
-    % Ducharne & Polcher, 1998
-    dd = 1.5;
-    Dmin = 0.048; % mm day-1
-    Dmax = 4.8; % mm day-1
-
-    thx1 = wa1 / theta_sat;
-
-    if thx1 < 0.75
-        Perc1 = Dmin * thx1;
-    else
-        Perc1 = Dmin * thx1 + (Dmax - Dmin) * thx1^dd;
-    end
-
     % drainage from unsaturated zone, #1
-    f1 = min(ks, Perc1);
+    f1 = soil_drainage(wa1_unsat, theta_sat, ks, 0.048, 4.8);
 
     % update the soil moisture after ET & drainage, layer #1
     wa1 = (wa1 * d1 - f1 - Es - Tr1) / d1;
@@ -146,19 +131,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     Tr2 = max(Tr2, 0); % reject negtive value
     Tr2 = min(Tr2, d2 * (wa2 - wwp)); % less than maximum avaliable water
 
-    % gravity drainage
-    Dmin = 0.012; % 0.0005*24, mm day-1
-    Dmax = 1.2; % 0.05*24,   mm day-1
-    thx2 = wa2 / theta_sat;
-
-    if thx2 < 0.75
-        Perc2 = Dmin * thx2;
-    else
-        Perc2 = Dmin * thx2 + (Dmax - Dmin) * thx2^dd;
-    end
-
     % drainage from unsaturated zone, #2
-    f2 = min(ks, Perc2);
+    f2 = soil_drainage(wa2_unsat, theta_sat, ks, 0.012, 1.2);
 
     % update the soil moisture after ET & drainage, layer #2
     wa2 = (wa2 * d2 + f1 - f2 - Tr2) / d2;

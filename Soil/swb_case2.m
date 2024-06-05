@@ -96,21 +96,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
         Es = d1 * wa1 - Tr1;
     end
 
-    % Ducharne % Polcher, 1998
-    dd = 1.5;
-    Dmin = 0.048; % mm day-1
-    Dmax = 4.8; % mm day-1
-
-    thx1 = wa1 / theta_sat;
-
-    if thx1 < 0.75
-        Perc1 = Dmin * thx1;
-    else
-        Perc1 = Dmin * thx1 + (Dmax - Dmin) * thx1^dd;
-    end
-
     % drainage from unsaturated zone, #1
-    f1 = min(ks, Perc1);
+    f1 = soil_drainage(wa1_unsat, theta_sat, ks, 0.048, 4.8);
 
     % update the soil moisture after drainage, layer #1
     wa1 = (wa1 * d1 - f1 - Es - Tr1) / d1;
@@ -120,19 +107,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % check Tr, layer #2   unsat-zone
     Tr2_u = max(Tr2_u, 0, d2 * (wa2_unsat - wwp)); % less than maximum avaliable water
 
-    % gravity drainage
-    Dmin = 0.012; % 0.0005*24, mm day-1
-    Dmax = 1.2; % 0.05*24,   mm day-1
-    thx2 = wa2_unsat / theta_sat;
-
-    if thx2 < 0.75
-        Perc2 = Dmin * thx2;
-    else
-        Perc2 = Dmin * thx2 + (Dmax - Dmin) * thx2^dd;
-    end
-
-    % drainage from unsaturated zone, #2
-    f2 = min(ks, Perc2);
+    % drainage from unsaturated zone, #2, gravity drainage
+    f2 = soil_drainage(wa2_unsat, theta_sat, ks, 0.012, 1.2);
 
     % update the soil moisture after ET & drainage, layer #2 un
     wa2_unsat = (wa2_unsat * d2 + f1 - f2 - Tr2_u) / d2;
