@@ -1,8 +1,7 @@
 % Case 0 -- groundwater overflow %
 function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     soilpar, pftpar, wet, zm, zgw)
-    % function input:
-    % ----------
+    %% INPUT:
     % wa      -- soil water content, 3 layers
     % IWS     -- total water enter into soil surface, mm
     % pEc     -- potential ET allocate to plant, mm
@@ -12,7 +11,6 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % wet     -- wetness indice
     % zm      -- soil layer depth, 3 layers
     % zgw     -- groundwater table depth, mm
-    % ----------
 
     % all saturated in layer #1 #2 #3
     % old soil water content in layer 1-3
@@ -20,20 +18,12 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     wa2 = wa(2);
     wa3 = wa(3);
 
-    % hydraulic conductivity for specific soil type
-    % ks = soilpar(1);
-
-    % saturated swc for specific soil type
-    theta_sat = soilpar(3);
-
-    % field water capacity for specific soil type
-    theta_fc = soilpar(5);
-
-    % wilting point for specific soil type
-    % wwp = soilpar(7);
+    theta_sat = soilpar(3);  % saturated swc
+    theta_fc  = soilpar(5);  % field water capacity
+    % ks        = soilpar(1);  % hydraulic conductivity
+    % wwp       = soilpar(7);  % wilting point
 
     % ====== water supplement ====== %
-
     % layer #1 - saturated
     % full filled with groundwater
 
@@ -44,11 +34,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % full filled with groundwater
 
     % ====== water consumption ====== %
-
-    % ------------------ %
-    % Evapotranspiration %
-    % ------------------ %
-
+    %% Evapotranspiration
     % distributed the potential Tr to different layers
     [Tr_p1, Tr_p2, Tr_p3] = pTr_partition(pEc, wa1, wa2, wa3, soilpar, ...
     pftpar, wet, zm);

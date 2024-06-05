@@ -1,8 +1,7 @@
 % Case 2 -- groundwater table in layer 2  %
 function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     soilpar, pftpar, wet, zm, zgw)
-    % function input:
-    % ----------
+    %% INPUT:
     % wa      -- soil water content, 3 layers
     % IWS     -- total water enter into soil surface, mm
     % pEc     -- potential ET allocate to plant, mm
@@ -12,77 +11,48 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % wet     -- wetness indice
     % zm      -- soil layer depth, 3 layers
     % zgw     -- groundwater table depth, mm
-    % ----------
 
-    % unsaturated depth in layer #1
+    % unsaturated depth in layer #1~2
     d1 = zm(1);
-    % unsaturated depth in layer #2
     d2 = zgw - d1;
 
-    % old soil water content in layer #1
     wa1 = wa(1);
-    % old soil water content in layer #2
     wa2 = wa(2);
-    % old soil water content in layer #3
     wa3 = wa(3);
 
-    % hydraulic conductivity for specific soil type
-    ks = soilpar(1);
-
-    % saturated swc for specific soil type
-    theta_sat = soilpar(3);
-
-    % field water capacity for specific soil type
-    theta_fc = soilpar(5);
-
-    % wilting point for specific soil type
-    wwp = soilpar(7);
+    ks        = soilpar(1);  % hydraulic conductivity
+    theta_sat = soilpar(3);  % saturated swc
+    theta_fc  = soilpar(5);  % field water capacity
+    wwp       = soilpar(7);  % wilting point
 
     % ====== water supplement ====== %
-
     % layer #1
     % existed water column in the unsaturated zone #1
     wa1_unsat = wa1;
     wc_s1 = d1 * wa1_unsat;
-
-    % maximum water column in d1
-    wc_m1 = d1 * theta_sat;
+    wc_m1 = d1 * theta_sat; % maximum water column in d1
 
     if wc_s1 + IWS >= wc_m1
-
-        % current soil water content
-        wa1 = theta_sat;
-        % exceeded water
-        vw1 = wc_s1 + IWS - wc_m1;
+        wa1 = theta_sat;            % current soil water content  
+        vw1 = wc_s1 + IWS - wc_m1;  % exceeded water
     else
-
-        % soil water content in unsaturated zone
-        wa1 = wa1_unsat + IWS / d1;
-        % no exceeded water
-        vw1 = 0;
+        wa1 = wa1_unsat + IWS / d1; % soil water content in unsaturated zone
+        vw1 = 0;                    % no exceeded water
     end
     
     % layer #2
     % existed water column in the unsaturated zone #2
     wa2_unsat = (wa2 * zm(2) - theta_sat * (zm(2) - d2)) / d2;
     wc_s2 = d2 * wa2_unsat;
-
-    % maximum water column in d2
-    wc_m2 = d2 * theta_sat;
+    wc_m2 = d2 * theta_sat; % maximum water column in d2
 
     if wc_s2 + vw1 >= wc_m2
-
-        % current soil water content
-        wa2_unsat = theta_sat;
-        % exceeded water
-        vw2 = wc_s2 + vw1 - wc_m2;
+        wa2_unsat = theta_sat;     % current soil water content
+        vw2 = wc_s2 + vw1 - wc_m2; % exceeded water
     else
-
-        % soil water content in unsaturated zone
-        wa2_unsat = wa2_unsat + vw1 / d2;
+        wa2_unsat = wa2_unsat + vw1 / d2; % soil water content in unsaturated zone
         % calculate the adjusted swc#2 with considering the groundwater depth
         wa2 = (wa2_unsat * d2 + theta_sat * (zm(2) - d2)) / zm(2);
-        % no exceeded water
         vw2 = 0;
     end
 
@@ -90,14 +60,9 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % full filled with groundwater
 
     % ====== water consumption ====== %
-
-    % ------------------ %
-    % Evapotranspiration %
-    % ------------------ %
-
+    %% Evapotranspiration %
     % distributed the potential Tr to different layers
-    [Tr_p1, Tr_p2, Tr_p3] = pTr_partition(pEc, wa1, wa2, wa3, soilpar, ...
-    pftpar, wet, zm);
+    [Tr_p1, Tr_p2, Tr_p3] = pTr_partition(pEc, wa1, wa2, wa3, soilpar, pftpar, wet, zm);
 
     % divide Tr_p2 into unsaturated zone and saturated zone
     Tr_p2_u = Tr_p2 * (d2 * wa2_unsat) / (d2 * wa2_unsat + ...
@@ -120,11 +85,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % actual soil evaporation
     Es = f_sm_s1 .* pEs; % only considering the first layer
 
-    % -------------------------------------- %
-    % soil water drainage (unsaturated zone) %
-    % -------------------------------------- %
-
-    % ---------------------------------------------------------------- layer #1
+    %% soil water drainage (unsaturated zone) %
+    % layer #1
     % check Es & Tr, layer #1   unsat-zone
     Es = max(Es, 0);
     Tr1 = max(Tr1, 0);
@@ -156,8 +118,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % ---------------------------------------------------------------- layer #2
     % check Tr, layer #2   unsat-zone
-    Tr2_u = max(Tr2_u, 0); % reject negtive value
-    Tr2_u = min(Tr2_u, d2 * (wa2_unsat - wwp)); % less than maximum avaliable water
+    Tr2_u = max(Tr2_u, 0, d2 * (wa2_unsat - wwp)); % less than maximum avaliable water
 
     % gravity drainage
     Dmin = 0.012; % 0.0005*24, mm day-1
@@ -175,9 +136,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % update the soil moisture after ET & drainage, layer #2 un
     wa2_unsat = (wa2_unsat * d2 + f1 - f2 - Tr2_u) / d2;
-
-    wa2_unsat = max(wa2_unsat, 0); % > 0
-    wa2_unsat = min(wa2_unsat, 1); % < 1
+    wa2_unsat = clamp(wa2_unsat, 0, 1); % > 0
 
     if wa2_unsat > theta_sat
         ff2 = (wa2_unsat - theta_sat) * d2; % extra water from upper layer

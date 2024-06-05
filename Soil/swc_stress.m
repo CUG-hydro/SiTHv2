@@ -1,6 +1,4 @@
-% ------------------------ %
 % Soil moisture Constrains %
-% ------------------------ %
 function [f_sm, f_sm_s] = swc_stress(wa, soilpar, pET, pftpar)
 % --INPUT:
 % wa      : The antecedent soil water content expressed
@@ -32,32 +30,26 @@ theta_wp = soilpar(7);
 
 % Canopy height
 CH = pftpar(4);
-CH_scalar = CH^0.5;
+k = CH^0.5;
 % scale [1, 25] to [1, 5] 
-CH_scalar = 4*((CH_scalar-0.7)/4.3)+1;
+k = 4*((k-0.7)/4.3)+1;
 
 a = 0.1;
 p = 1./(1+pET) - a.*(1./(1+CH));
 
-theta_wpCH = theta_wp/CH_scalar;
+theta_wpCH = theta_wp/k;
 
 % critical soil mositure for different PFTs
 theta_c = (1-p).*(theta_fc-theta_wpCH) + theta_wpCH; 
-
-if theta_c < theta_wpCH
-    theta_c = theta_wpCH;
-elseif theta_c > theta_fc
-    theta_c = theta_fc;
-end
+theta_c = clamp(theta_c, theta_wpCH, theta_fc);
 % theta_c   = soilpar(6);
-
 
 if wa <= theta_wpCH
     f_sm = 0;
 elseif wa >= theta_c
     f_sm = 1;
 else
-    f_sm = 1 - ((theta_c-wa)./(theta_c-theta_wpCH)).^CH_scalar; 
+    f_sm = 1 - ((theta_c-wa)./(theta_c-theta_wpCH)).^k; 
 end
 
 
@@ -68,7 +60,7 @@ if wa <= theta_wp_soil
 elseif wa >= theta_fc
     f_sm_s = 1;
 else
-%     f_sm_s = ((wa - theta_wp)./(theta_fc - theta_wp)).^1;
+    % f_sm_s = ((wa - theta_wp)./(theta_fc - theta_wp)).^1;
     f_sm_s = (wa-theta_wp_soil)/(theta_fc - theta_wp_soil); % for soil evaporation only
 end
 
