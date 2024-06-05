@@ -1,4 +1,3 @@
-
 clc
 clear 
 
@@ -48,7 +47,6 @@ Topt = single(Topt.Topt_new);
 
 % Main loops
 for yr = 1982 : 2020
-
     clear waa zgww snpp
     disp(' ')
     disp(['------------------------- Start calculation for ' num2str(yr)])

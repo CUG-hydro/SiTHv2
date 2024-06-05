@@ -1,6 +1,4 @@
-% ---------------------------------- %
 %  Potential transpiration partition %
-% -----------------------------------%
 function [Tr_p1, Tr_p2, Tr_p3] = pTr_partition(pEc, wa1, wa2, wa3, ...
     soilpar, pftpar, fwet, zm)
 % ------- function input -------

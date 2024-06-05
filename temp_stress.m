@@ -1,6 +1,4 @@
-% ---------------------- %
 % Temperature Constrains %
-% ---------------------- %
 function [St] = temp_stress(Topt,Ta)
 % ------ function input -------
 % Topt  : Optimum temperature for plant growning
