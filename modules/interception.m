@@ -2,7 +2,7 @@
 %  Interception evaporation  %
 % -------------------------- %
 function [Ei,wetT,Pe] = interception(pEc,LAI,Rain,pftpar)
-% ------- function input -------
+% -INPUT:
 % pEc    : potnetial Evaporation on canopy
 % Rain   :
 % LAI    : Leaf area index
@@ -29,7 +29,6 @@ Sc = min(Rain, inc.*LAI.*Rain);
 wetT = min(0.7.*Sc./pEc,1); 
 
 if pEc < 1e-3
-
     Ei = 0;
 else
     Ei = pEc.*wetT; 

@@ -15,12 +15,9 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % ----------
 
     % all saturated in layer #1 #2 #3
-
-    % old soil water content in layer #1
+    % old soil water content in layer 1-3
     wa1 = wa(1);
-    % old soil water content in layer #2
     wa2 = wa(2);
-    % old soil water content in layer #3
     wa3 = wa(3);
 
     % hydraulic conductivity for specific soil type
@@ -68,18 +65,11 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % layer #2   full filled with groundwater
     % layer #3   full filled with groundwater
 
-    % --------------------------- %
-    % The groundwater table depth %
-    % --------------------------- %
-
-    % total water recharge to groundwater from unsaturated zone
-    F1 = IWS;
-
-    % total transpiration from groundwater
-    Tr_g = Tr;
-
-    % R_sb groundwater discaharge
-    R_sb_max = 39; % mm day-1
+    %% The groundwater table depth %
+    F1 = IWS;  % total water recharge to groundwater from unsaturated zone
+    Tr_g = Tr; % total transpiration from groundwater
+    
+    R_sb_max = 39; % groundwater discaharge, [mm day-1]
     f = 1.25e-3; % mm-1
     R_sb = R_sb_max * exp(-f * zgw);
 
@@ -87,49 +77,37 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     delta_w = F1 - Tr_g - R_sb; % should below zero
 
     % changes of groundwater table depth
-    delta_zgw = delta_w / (theta_sat - theta_fc);
+    delta_zgw = delta_w / (theta_sat - theta_fc); % 按照田间持水量进行排水
     zgw = zgw - delta_zgw;
     uex = 0; % excess water to soil surface, mm
 
     % update soil moisture and groundwater table depth
     if zgw > zm(1) + zm(2) + zm(3)
-
         wa1 = theta_fc;
         wa2 = theta_fc;
         wa3 = theta_fc;
-
     elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
-
         wa1 = theta_fc;
         wa2 = theta_fc;
         wa3 = (theta_fc * (zgw - zm(1) - zm(2)) + theta_sat * ...
-            (zm(1) + zm(2) + zm(3) - zgw)) / zm(3);
-
+            (zm(1) + zm(2) + zm(3) - zgw)) / zm(3); % 水面之下饱和、落水之上fc
     elseif zgw > zm(1) && zgw < zm(1) + zm(2)
-
         wa1 = theta_fc;
         wa2 = (theta_fc * (zgw - zm(1)) + theta_sat * (zm(1) + ...
             zm(2) - zgw)) / zm(2);
         wa3 = theta_sat;
-
     elseif zgw > 0 && zgw < zm(1)
-
         wa1 = (theta_fc * zgw + theta_sat * (zm(1) - zgw)) / zm(1);
         wa2 = theta_sat;
         wa3 = theta_sat;
-
     elseif zgw <= 0
-
         wa1 = theta_sat;
         wa2 = theta_sat;
         wa3 = theta_sat;
-
         uex = -zgw * theta_fc; % excess water to soil surface, mm
-
+        % uex = -zgw * (theta_sat - theta_fc); % excess water to soil surface, mm
     end
-
     % updated soil water content
     wa = [wa1, wa2, wa3];
     zgw = max(0, zgw);
-
 end

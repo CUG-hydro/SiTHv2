@@ -17,11 +17,9 @@ function [wa, zgw, Tr, Es, uex] = swb_case1(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % unsaturated depth in layer #1
     d1 = zgw;
 
-    % old soil water content in layer #1
+    % old soil water content in layer 1~3
     wa1 = wa(1);
-    % old soil water content in layer #2
     wa2 = wa(2);
-    % old soil water content in layer #3
     wa3 = wa(3);
 
     % hydraulic conductivity for specific soil type
@@ -39,11 +37,9 @@ function [wa, zgw, Tr, Es, uex] = swb_case1(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % ====== water supplement ====== %
     % layer #1
     % existed water column in the unsaturated zone #1
-    wa1_unsat = (wa1 * zm(1) - theta_sat * (zm(1) - d1)) / d1;
-    wc_s1 = d1 * wa1_unsat;
-
-    % maximum water column in d1
-    wc_m1 = d1 * theta_sat;
+    wa1_unsat = (wa1 * zm(1) - theta_sat * (zm(1) - d1)) / d1; % [m3 m-3]
+    wc_s1 = d1 * wa1_unsat; % [mm]
+    wc_m1 = d1 * theta_sat; % maximum water column in d1, [mm]
 
     if wc_s1 + IWS >= wc_m1
         % current soil water content
@@ -148,9 +144,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case1(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % changes of groundwater table depth
 %     if delta_w < 0 % decline of the water table
-% 
 %         delta_zgw = delta_w / theta_fc;
-% 
 %     else % increase of the water table
       delta_zgw = delta_w / (theta_sat - wa1_unsat);
 %     end

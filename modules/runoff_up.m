@@ -1,8 +1,6 @@
-% --------------- %
 %      Runoff     %
-% ----------------%
 function [srf, IWS, Vmax] = runoff_up(Pnet, zgw, zm, wa, soilpar)
-% --------- function input -------
+% ---INPUT:
 % zm       : Soil depth of different layers
 % wa       : The antecedent soil water content expressed
 %            as a function of the WHC in that layer
@@ -25,13 +23,11 @@ function [srf, IWS, Vmax] = runoff_up(Pnet, zgw, zm, wa, soilpar)
 theta_sat = soilpar(3);
 
 if zgw <= 0
-
     % exceeded groundwater on the soil surface
     Vmax = 0;
     srf = 0 - zgw * theta_sat;
 
 elseif zgw > 0 && zgw <= zm(1)
-
     % the thickness of unsaturated soil in ith layer, (mm)
     d1 = zgw;
 
@@ -48,7 +44,6 @@ elseif zgw > 0 && zgw <= zm(1)
     end
 
 elseif zgw > zm(1) && zgw <= zm(1) + zm(2)
-
     % the thickness of unsaturated soil in ith layer, (mm)
     d1 = zm(1);
     d2 = zgw - zm(1);
@@ -84,7 +79,6 @@ elseif zgw > zm(1) + zm(2)
     else
         srf = 0;
     end
-
 end
 
 % actual water enter into the soil surface, (mm)

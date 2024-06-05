@@ -1,5 +1,4 @@
-clc
-clear 
+clear, clc
 
 % Set spatial resolution
 res = 0.1; % degrees, global
@@ -31,15 +30,15 @@ rasterSize = [720,1440];
 RA = georefcells(latlim,lonlim,rasterSize,'ColumnsStartFrom','north');
 
 % Load soil type
-Soilraster = load('inpara\Soilraster.mat');
+Soilraster = load('inpara/Soilraster.mat');
 Soilraster = Soilraster.Soilraster; 
 
 % Load land mask
-maskland = load('inpara\landmask01.mat');
+maskland = load('inpara/landmask01.mat');
 maskland = uint8(maskland.mask2);
 
 % Load the optimal temperature for plant growth
-Topt = load('inpara\Topt.mat');
+Topt = load('inpara/Topt.mat');
 Topt = single(Topt.Topt_new);
 
 % Parallel calculation
@@ -52,7 +51,6 @@ for yr = 1982 : 2020
     disp(['------------------------- Start calculation for ' num2str(yr)])
     % spin-up year : 100 years
     if yr == 1981
-
         spinfg = 1; % need spin-up
         disp(' ')
         disp('start year ... spin-up ... set spinfg = 1')
@@ -309,5 +307,4 @@ for yr = 1982 : 2020
 
     disp('------------------------- End of this year ... ')
     disp(' ')
-
 end

@@ -214,9 +214,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 %         delta_zgw = delta_w / (theta_sat - theta_fc);
 % 
 %     else % increase of the water table
-
     delta_zgw = delta_w / (theta_sat - (wa1 + wa2_unsat) / 2);
-
 %     end
 
     zgw = zgw - delta_zgw;
@@ -224,40 +222,28 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % update soil moisture and groundwater table depth
     if zgw > zm(1) + zm(2) + zm(3)
-
         wa2 = (wa2_unsat * d2 + theta_fc * (zm(2) - d2)) / zm(2);
         wa3 = theta_fc;
-
     elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
-
         wa2 = (wa2_unsat * d2 + theta_fc * (zm(2) - d2)) / zm(2);
         wa3 = (theta_fc * (zgw - zm(1) - zm(2)) + theta_sat * ...
             (zm(1) + zm(2) + zm(3) - zgw)) / zm(3);
-
     elseif zgw > zm(1) && zgw < zm(1) + zm(2)
-
         wa2 = (wa2_unsat * (zgw - zm(1)) + theta_sat * ...
             (zm(1) + zm(2) - zgw)) / zm(2);
         wa3 = theta_sat;
-
     elseif zgw > 0 && zgw < zm(1)
-
         wa1 = (wa1 * zgw + theta_sat * (zm(1) - zgw)) / zm(1);
         wa2 = theta_sat;
         wa3 = theta_sat;
-
     elseif zgw <= 0
-
         wa1 = theta_sat;
         wa2 = theta_sat;
         wa3 = theta_sat;
-
         uex = -zgw * theta_fc; % excess water to soil surface, mm
-
     end
 
     % updated soil water content
     wa = [wa1, wa2, wa3];
     zgw = max(0, zgw);
-
 end

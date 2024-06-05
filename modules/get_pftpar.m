@@ -1,5 +1,4 @@
 function [pftpar] = get_pftpar(LC)
-
 % ---------------------------------------------------------------- %
 % Standard numbering rule for different PFTs based on MCD12, IGBP- %
 % ---------------------------------------------------------------- %

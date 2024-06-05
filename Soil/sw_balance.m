@@ -1,7 +1,7 @@
 %    Soil Water Balance   %     
 function [wa, zgw, Tr, Es, uex] = sw_balance(IWS, pEc, pEs, Ta, Topt, s_VOD, ...
     wa, soilpar, pftpar, wet, zm, zgw)
-    % ---------- function input -------
+    % ----INPUT:
     % IWS     -- total water enter into soil surface, mm
     % pEc     -- potential ET allocate to plant, mm
     % pEs     -- potential ET allocate to soil surface, mm
@@ -14,14 +14,14 @@ function [wa, zgw, Tr, Es, uex] = sw_balance(IWS, pEc, pEs, Ta, Topt, s_VOD, ...
     % wet     -- wetness fraction indice
     % zm      -- soil layer depth, 3 layers
     % zgw     -- groundwater table depth, mm
-    % ---------- function output -------
+    % ----OUTPUT:
     % Tr      -- actual plant transpiration, mm
     % Es      -- actual soil evaporation, mm
     % wa      -- updated soil water content, 3 layers, %
     % zgw     -- groundwater table depth, mm
     % uex     -- goundwater overflow soil surface, mm
     % ----------
-
+    
     % Constrains of temperature
     [s_tem] = temp_stress(Topt, Ta);
 
@@ -33,28 +33,33 @@ function [wa, zgw, Tr, Es, uex] = sw_balance(IWS, pEc, pEs, Ta, Topt, s_VOD, ...
     if zgw <= 0
         [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_VOD, ...
             soilpar, pftpar, wet, zm, zgw);
-
         % Case 1: groundwater table in layer 1
     elseif zgw > 0 && zgw <= zm(1)
         [wa, zgw, Tr, Es, uex] = swb_case1(wa, IWS, pEc, pEs, s_tem, s_VOD, ...
             soilpar, pftpar, wet, zm, zgw);
-
         % Case 2: groundwater table in layer 2
     elseif zgw > zm(1) && zgw <= zm(1) + zm(2)
         [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_VOD, ...
             soilpar, pftpar, wet, zm, zgw);
-
         % Case 3: groundwater table in layer 3
     elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
         [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_VOD, ...
             soilpar, pftpar, wet, zm, zgw);
-
         % Case 4: groundwater table below layer 3
     else
         [wa, zgw, Tr, Es, uex] = swb_case4(wa, IWS, pEc, pEs, s_tem, s_VOD, ...
             soilpar, pftpar, wet, zm, zgw);
-
     end
-
 end
 
+
+% Temperature Constrains for plant growing
+function [St] = temp_stress(Topt,Ta)
+%% INPUT:
+% - Topt  : Optimum temperature for plant growning
+% - Ta    : Air temperature
+% 
+%% OUTPUT:
+% - St    : Temperature stress
+St = exp(-((Ta-Topt)./Topt).^2);
+end

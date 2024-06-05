@@ -2,11 +2,11 @@
 % Soil moisture Constrains %
 % ------------------------ %
 function [f_sm, f_sm_s] = swc_stress(wa, soilpar, pET, pftpar)
-% -------- function input -------
+% --INPUT:
 % wa      : The antecedent soil water content expressed
 %           as a function of the WHC in that layer
 % soilpar : Soil parameters according to Soil type
-% -------- function output -------
+% --OUTPUT:
 % S_plant : Soil moisture stress to plant transpiration
 % S_soil  : Soil moisture stress to soil evaporation
 % --------
@@ -74,10 +74,6 @@ end
 
 end
 
-
-
-
-
 % --- old version
 % % wc = (theta_c - theta_wp) / (theta_fc - theta_wp);
 % if wa <= theta_wp
@@ -91,10 +87,3 @@ end
 % --- old version
 
 % f_sm_s = wa ./ wc;
-
-
-
-
-
-
-

@@ -1,8 +1,6 @@
-% ------------------------ %
 %  Potential ET partition  %
-% ------------------------ %
 function [pEc,pEs] = potentialET(Rn,G,LAI,Ta,Pa)
-% ------ function input -------
+% INPUT:
 % Ta    :  air temperature, C
 % Rn    :  average daily net radiation, W/m^2
 % Pa    :  atmospheric pressure, kPa
@@ -28,8 +26,8 @@ lambda = 2.501e6-2361.*Ta;
 % Saturation vapour pressure at Ta, (kPa)
 es = 0.6108.*exp((17.27.*Ta)./(Ta+237.3));
 
-% Slope of saturation vapour pressure curve at Ta (kPa/degC) 
-delta = (4098.*es)./((Ta+237.3).^2); 
+% Slope of saturation vapour pressure curve at Ta (kPa/degC)
+delta = (4098.*es)./((Ta+237.3).^2);
 
 % psychrometric constant [Pa/C]
 gamma = (Cp.*Pa)./(eps*lambda); % Psychrometric constant (kPa/degC)

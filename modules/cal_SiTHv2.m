@@ -1,7 +1,12 @@
 % run SiTHv2 model
 function [ETs, Trs, Ess, Eis, Esbs, SM, RF, GW, snp] = cal_SiTHv2(Rni, Tai, Tasi, Precii,...
     Pai, Gi, LAIii, Top, s_VODi, soilpar, pftpar, wa, zgw, snp, spinfg)
-
+%% INPUT
+% - `Top`   : optimal growth temperature for plant, degC
+% - `wa`    : Soil moisture (last step)
+% - `zgw`   : groundwater table depth, mm
+% - `snp`   : Snow package (old), mm day-1
+% - `spinfg`: spin-up flag, 1 for spin-up, 0 for normal calculation. 循环重复跑100次。
 if spinfg == 1 % spin-up
     ETs = zeros(size(Rni, 1), 1);
     Trs = zeros(size(Rni, 1), 1);
@@ -38,7 +43,6 @@ if spinfg == 1 % spin-up
     end
 
 else % normal calculation
-
     ETs = zeros(size(Rni, 1), 1);
     Trs = zeros(size(Rni, 1), 1);
     Ess = zeros(size(Rni, 1), 1);
@@ -49,7 +53,6 @@ else % normal calculation
     GW = zeros(size(Rni, 1), 1);
 
     for i = 1 : size(Rni, 1)
-
         Rn = Rni(i, 1);
         Ta = Tai(i, 1);
         Tas = Tasi(i, 1);
@@ -70,7 +73,6 @@ else % normal calculation
         SM(i, :) = wa;
         RF(i, 1) = srf;
         GW(i, 1) = zgw;
-
     end
 end
 end

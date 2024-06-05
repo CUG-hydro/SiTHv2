@@ -1,7 +1,8 @@
 function [soilpar] = get_soilpar(SC)
-% ----------Input----------
+%% INPUT
 % Soil Type idnex
-% ----------Output----------
+% 
+%% OUTPUT
 % soilpar ::
 %     1  ks         -- hydraulic conductivity, m day-1
 %     2  pha_sat    -- water potential at saturation condition
@@ -11,7 +12,7 @@ function [soilpar] = get_soilpar(SC)
 %     6  theta_c    -- soil moisture at critical value
 %     7  theta_wp   -- soil moisture at wilting point
 % --------------------
-
+% 
 % ----------- 3-D rasters that contians the seven soil characteristic parameters ---------------
 %        1            2            3        4        5          6       7
 %        Ksat      pha_sat	   theta_sat    b     theta_fc  theta_c	 theta_wp   Soil Type
@@ -30,4 +31,5 @@ store = [1.3841	   -0.0232       0.373	   3.39	    0.151	  0.109	  0.035;    % 1
 % -----------------------------------------------------------------------------------------------
 store(:,1) = 1000 .* store(:,1); % m --> mm
 soilpar = store(SC, :);
+
 end
