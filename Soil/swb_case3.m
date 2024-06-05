@@ -36,10 +36,8 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     wc_m1 = d1 * theta_sat;
 
     if wc_s1 + IWS >= wc_m1
-        % current soil water content
-        wa1 = theta_sat;
-        % exceeded water
-        vw1 = wc_s1 + IWS - wc_m1;
+        wa1 = theta_sat;           % current soil water content
+        vw1 = wc_s1 + IWS - wc_m1; % exceeded water
     else
         % soil water content in unsaturated zone
         wa1 = wa1_unsat + IWS / d1;
@@ -131,7 +129,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     Tr2 = max(Tr2, 0); % reject negtive value
     Tr2 = min(Tr2, d2 * (wa2 - wwp)); % less than maximum avaliable water
 
-    % drainage from unsaturated zone, #2
+    % gravity drainage from unsaturated zone, #2
     f2 = soil_drainage(wa2_unsat, theta_sat, ks, 0.012, 1.2);
 
     % update the soil moisture after ET & drainage, layer #2
@@ -153,20 +151,9 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     Tr3_u = max(Tr3_u, 0); % reject negtive value
     Tr3_u = min(Tr3_u, d3 * (wa3_unsat - wwp)); % less than maximum avaliable water
 
-    % gravity drainage
-    Dmin = 0.012; % 0.0005*24, mm day-1
-    Dmax = 1.2; % 0.05*24,   mm day-1
-    thx3 = wa3_unsat / theta_sat;
-
-    if thx3 < 0.75
-        Perc3 = Dmin * thx3;
-    else
-        Perc3 = Dmin * thx3 + (Dmax - Dmin) * thx3^dd;
-    end
-
-    % drainage from unsaturated zone, #3
-    f3 = min(ks, Perc3);
-
+    % gravity drainage from unsaturated zone, #2
+    f3 = soil_drainage(wa3_unsat, theta_sat, ks, 0.012, 1.2);
+    
     % update the soil moisture after ET & drainage, layer #3
     wa3_unsat = (wa3_unsat * d3 + f2 + ff2 - f3 - Tr3_u) / d3;
 
@@ -195,9 +182,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % changes of groundwater table depth
 %     if delta_w < 0 % decline of the water table
-% 
 %         delta_zgw = delta_w / (theta_sat - theta_fc);
-% 
 %     else % increase of the water table
     delta_zgw = delta_w / (theta_sat - (wa1 + wa2 + wa3_unsat) / 3);
 %     end
