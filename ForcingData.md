@@ -27,3 +27,14 @@
 - `wa` : 三层土壤含水量
 - `zwg`: groundwater table depth, mm
 - `snp`: snow package, mm
+
+
+# 可以替换的变量
+
+## 土壤参数
+
+除了`theta_c`: http://globalchange.bnu.edu.cn/research/soil2
+
+## 根系参数
+
+Hydrologic Regulation of Plant Rooting Depth

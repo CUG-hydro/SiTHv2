@@ -30,12 +30,9 @@ years = year(dates);
 %% 创建一个结构体，存放状态变量
 % 状态变量需要连续，传递到下一年中
 uptval = load('output_data_spin.mat').X_upti;
-SM = uptval(1, 1:3); % 怀疑写颠倒了
-ZG = uptval(1, 4);
+sm = uptval(1, 1:3); % 怀疑写颠倒了
+zg = uptval(1, 4);
 snowpack = uptval(1, 5);
 %% 模型对初始状态state敏感，KGE下降0.04, [0.43] -> [0.39]
-% SM = [0.3, 0.15, 0.06];
-% ZG = 6.75 * 1000;
-% snowpack = 0;
 state = struct();
-state = mSiTH.update_state(state, SM, ZG, snowpack);
+state = mSiTH.update_state(state, sm, zg, snowpack);

@@ -7,10 +7,10 @@ read_flux <- function(f) {
     fread(f, skip = 2) |> set_names(vars)
 }
 
+f = "data/OUTPUT_栾城_spin300y.csv"
 d_obs <- read_flux("data/CRO_栾城_Day_Flux_200710-201809.csv") |> 
     mutate(date = date(date))
-d_sim <- fread("data/OUTPUT_栾城.csv") |> 
-    rename(date = dates)
+d_sim <- fread(f) |> rename(date = dates)
 dat = merge(d_obs, d_sim, by = "date", suffixes = c("_obs", "_sim")) |> 
     filter(year(date) <= 2016)
 
