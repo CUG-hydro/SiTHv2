@@ -1,7 +1,7 @@
 %% 栾城站: 模型测试
 % kongdd, CUG, 2024-10-08
 clc, clear;
-ex1_LuanCheng;
+ex1_Loaddata_LuanCheng;
 
 N = size(df, 1);
 ET = zeros(N, 1);
@@ -14,6 +14,7 @@ GW = zeros(N, 1);
 R = zeros(N, 1);
 SM = zeros(N, 3);
 
+tic
 for yr = 1989:2016
     k = yr - 1988 + 1; % 因为1988是第一年，索引从1开始
     spinfg = 0;
@@ -41,9 +42,11 @@ for yr = 1989:2016
         cal_SiTHv2_site(Rn, Ta, Tas, Prcp, Pa, Gi, LAI, Top, s_VODi, ...
         soilpar, pftpar, state, spinfg);
 end
+toc
 
 SM1 = SM(:,1);
 SM2 = SM(:,2);
 SM3 = SM(:,3);
 df_out = table(dates, ET, Tr, Es, Ei, Esb, RF, GW, SM1, SM2, SM3);
 writetable(df_out, "data/OUTPUT_栾城.csv")
+system("Rscript Examples/Figure1_栾城_SiTH.R");

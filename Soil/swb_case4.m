@@ -174,9 +174,13 @@ function [wa, zgw, Tr, Es, uex] = swb_case4(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     delta_w = F1 - Tr_g - R_sb;
 
     % changes in groundwater table depth
-    delta_zgw = delta_w / 0.2;
+    delta_zgw = delta_w / 0.2; % specific yield as 0.2
     zgw = zgw - delta_zgw;
     uex = 0; % excess water to soil surface, mm
+
+    % if F1 > 0
+    %     fprintf("F1 = %.5f, R_sb = %.5f, delta_w = %.5f, delta_zgw = %.5f, zgw = %.5f \n", F1, R_sb, delta_w, delta_zgw, zgw);
+    % end
 
     % update soil moisture and groundwater table depth
     if zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)

@@ -10,9 +10,9 @@ read_flux <- function(f) {
 d_obs <- read_flux("data/CRO_栾城_Day_Flux_200710-201809.csv") |> 
     mutate(date = date(date))
 d_sim <- fread("data/OUTPUT_栾城.csv") |> 
-    rename(date = dates) |> 
+    rename(date = dates)
+dat = merge(d_obs, d_sim, by = "date", suffixes = c("_obs", "_sim")) |> 
     filter(year(date) <= 2016)
-dat = merge(d_obs, d_sim, by = "date", suffixes = c("_obs", "_sim"))
 
 # ET模拟结果
 fmt_gof = "*KGE* = {str_num(KGE,2)}, *NSE* = {str_num(NSE,2)}, *R^2* = {str_num(R2, 2)} \n *RMSE* = {str_num(RMSE,2)}"
@@ -21,15 +21,15 @@ p <- ggplot(pdat) +
     geom_line(aes(date, value, color = variable)) + 
     geom_gof2(data = dat, aes(obs = ET_obs, sim = ET_sim), label.format = fmt_gof) + 
     labs(y = "Evapotranspiration (mm/d)", x = NULL)
-write_fig(p, 'Figures/Figure1_栾城_ET_GOF.pdf', 10, 5)
+write_fig(p, 'Figures/Figure1_栾城_ET.pdf', 10, 5)
 
 # GW模拟结果
-p <- ggplot(dat) + 
+p <- ggplot(d_sim[GW>0]) + 
     geom_line(aes(date, GW)) 
 write_fig(p, 'Figures/Figure1_栾城_GW.pdf', 10, 5)
 
 # SM
-pdat = dat[, .(date, SM1, SM2, SM3)] |> melt("date")
+pdat = d_sim[GW>0, .(date, SM1, SM2, SM3)] |> melt("date")
 p <- ggplot(pdat) +
     geom_line(aes(date, value)) + 
     facet_wrap(~variable, scales = "free_y")

@@ -105,7 +105,7 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
 
     % ---------------------------------------------------------------- layer #2
     % check Tr, layer #2   unsat-zone
-    Tr2_u = max(Tr2_u, 0, d2 * (wa2_unsat - wwp)); % less than maximum avaliable water
+    Tr2_u = clamp(Tr2_u, 0, d2 * (wa2_unsat - wwp)); % less than maximum avaliable water
 
     % drainage from unsaturated zone, #2, gravity drainage
     f2 = soil_drainage(wa2_unsat, theta_sat, ks, 0.012, 1.2);
