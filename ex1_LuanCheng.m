@@ -14,7 +14,8 @@ GW = zeros(N, 1);
 R = zeros(N, 1);
 SM = zeros(N, 3);
 
-sm = [0.3, 0.15, 0.06];
+% TODO: initial soil moisture according to the soil texture
+sm = [0.3, 0.15, 0.06]; 
 zg = 0 * 1000;
 snowpack = 0;
 state = mSiTH.update_state(state, sm, zg, snowpack);
@@ -26,7 +27,7 @@ for i = 1:11
     for yr = 1989:2016
         k = yr - 1988 + 1; % 因为1988是第一年，索引从1开始
         spinfg = 0;
-        fprintf('[%d, spinfg=0] ... \n', yr)
+        % fprintf('[%d, spinfg=0] ... \n', yr)
         
         inds = find(years == yr);
         days = length(inds); % 获取该年的天数
@@ -58,4 +59,4 @@ SM2 = SM(:,2);
 SM3 = SM(:,3);
 df_out = table(dates, ET, Tr, Es, Ei, Esb, RF, GW, SM1, SM2, SM3);
 writetable(df_out, "data/OUTPUT_栾城_spin300y.csv")
-system("Rscript data/Figure1_栾城_SiTH.R");
+% system("Rscript data/Figure1_栾城_SiTH.R");

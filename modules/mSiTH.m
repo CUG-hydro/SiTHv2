@@ -5,24 +5,29 @@ classdef mSiTH
     end
     
     methods (Static)
-        function [State] = update_state(State, SM, ZG, snowpack)
+        function [State] = update_state(State, sm, zg, snowpack)
             % Create a structure to store state variables
+            % 
+            % 状态变量需要连续，传递到下一年中；模型对初始状态state敏感。
+            % - sm: 采用warming-up的方式获取，warming-up period可取3年
+            % - zg: 采用spin-up的方式获取，spin-up period可取100年
+            % 
             %% Argument Specification
-            % - SM: soil water content in three layers, [m^3 m^-3]
-            % - ZG: groundwater depth, [mm]
+            % - sm: soil water content in three layers, [m^3 m^-3]
+            % - zg: groundwater depth, [mm]
             % - snowpack: snowpack depth
-            SM(SM < 0) = 0.01; % set the minimum value for soil moisture
-            State.SM = SM;
-            State.ZG = ZG;
+            sm(sm < 0) = 0.01; % set the minimum value for soil moisture
+            State.sm = sm;
+            State.zg = zg;
             State.snowpack = snowpack;
         end
         
-        function [SM, ZG, snowpack] = get_state(State)
+        function [sm, zg, snowpack] = get_state(State)
             % Get the state variables
             %% Argument Specification
             % - State: a structure to store state variables
-            SM = State.SM;
-            ZG = State.ZG;
+            sm = State.sm;
+            zg = State.zg;
             snowpack = State.snowpack;
         end
     end
