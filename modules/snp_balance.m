@@ -13,30 +13,22 @@ if Ta <= 0
     newsnow = preci;
     snowpack = snowpack + newsnow;
     
-    % snon melt
-    snowmelt = 0;
+    snowmelt = 0;                    % snon melt
+    Esb = clamp(snowpack, 0, Esnow); % real snow sublimation
     
-    % real snow sublimation
-    Esb = min(snowpack, Esnow);
-    Esb = max(Esb, 0); % >0
-    
-    % net Precipitation into soil surface
-    Pnet = 0;
-    % new snowpack
-    snowpack = snowpack - Esb;
+    Pnet = 0;                        % net Precipitation into soil surface
+    snowpack = snowpack - Esb;       % new snowpack
 else
     % real snow sublimation
-    Esb = min(snowpack, Esnow);
-    Esb = max(Esb, 0);
-
+    Esb = clamp(snowpack, 0, Esnow);
+    
     snowpack = snowpack - Esb;
     % snow melt, Ta>0
     snowmelt_x = (1.5 + 0.007 * preci) * Tas; % Tas, accumulated Ta > 0
     snowmelt = min(snowpack, snowmelt_x);
     snowpack = snowpack - snowmelt;
     
-    % net water into soil surface
-    Pnet = max(0, preci + snowmelt);
+    Pnet = max(0, preci + snowmelt); % net water into soil surface
 end
 
 end
