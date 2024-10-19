@@ -1,5 +1,5 @@
 % run SiTHv2 model
-function [ETs, Trs, Ess, Eis, Esbs, SM, RF, GW, state] = cal_SiTHv2_site(Rni, Tai, Tasi, Precii,...
+function [ETs, Trs, Ess, Eis, Esbs, SM, RF, GW, state] = SiTHv2_site(Rni, Tai, Tasi, Precii,...
     Pai, Gi, LAIii, Top, s_VODi, soilpar, pftpar, state, spinfg)
 %% INPUT
 % - `Top`   : optimal growth temperature for plant, degC

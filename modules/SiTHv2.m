@@ -47,7 +47,7 @@ zm = [50, 1450, 3500]; % mm
 [pEc, pEs] = potentialET(Rn, G, LAI, Ta, Pa);
 
 % interception evaporation
-[Ei, fwet, ~] = interception(LAI, Pe, pEc, pftpar);
+[Ei, fwet, ~] = interception(Pe, pEc, LAI, pftpar);
 
 % snow sublimation, snow melt
 new_Pe = max(Pe - Ei, 0);

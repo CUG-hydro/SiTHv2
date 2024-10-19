@@ -1,5 +1,5 @@
 %  Interception evaporation  %
-function [Ei,wetT,Pe] = interception(pEc,LAI,Rain,pftpar)
+function [Ei,wetT,Pe] = interception(Rain, pEc, LAI, pftpar)
 % -INPUT:
 % pEc    : potnetial Evaporation on canopy
 % Rain   :
@@ -24,11 +24,11 @@ function [Ei,wetT,Pe] = interception(pEc,LAI,Rain,pftpar)
 inc = pftpar(1);
 Sc = min(Rain, inc.*LAI.*Rain); 
 
-wetT = min(0.7.*Sc./pEc,1); 
-
 if pEc < 1e-3
+    wetT = 1.0;
     Ei = 0;
 else
+    wetT = min(0.7.*Sc./pEc,1); 
     Ei = pEc.*wetT; 
 end
 
