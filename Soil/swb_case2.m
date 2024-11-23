@@ -159,15 +159,15 @@ function [wa, zgw, Tr, Es, uex] = swb_case2(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     if zgw > zm(1) + zm(2) + zm(3)
         wa2 = (wa2_unsat * d2 + theta_fc * (zm(2) - d2)) / zm(2);
         wa3 = theta_fc;
-    elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
+    elseif zgw > zm(1) + zm(2) && zgw <= zm(1) + zm(2) + zm(3)
         wa2 = (wa2_unsat * d2 + theta_fc * (zm(2) - d2)) / zm(2);
         wa3 = (theta_fc * (zgw - zm(1) - zm(2)) + theta_sat * ...
             (zm(1) + zm(2) + zm(3) - zgw)) / zm(3);
-    elseif zgw > zm(1) && zgw < zm(1) + zm(2)
+    elseif zgw > zm(1) && zgw <= zm(1) + zm(2)
         wa2 = (wa2_unsat * (zgw - zm(1)) + theta_sat * ...
             (zm(1) + zm(2) - zgw)) / zm(2);
         wa3 = theta_sat;
-    elseif zgw > 0 && zgw < zm(1)
+    elseif zgw > 0 && zgw <= zm(1)
         wa1 = (wa1 * zgw + theta_sat * (zm(1) - zgw)) / zm(1);
         wa2 = theta_sat;
         wa3 = theta_sat;

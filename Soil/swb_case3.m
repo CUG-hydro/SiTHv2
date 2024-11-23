@@ -192,12 +192,12 @@ function [wa, zgw, Tr, Es, uex] = swb_case3(wa, IWS, pEc, pEs, s_tem, s_vod, ...
     % update soil moisture and groundwater table depth
     if zgw > zm(1) + zm(2) + zm(3)
         wa3 = (wa3_unsat * d3 + theta_fc * (zm(3) - d3)) / zm(3);
-    elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
+    elseif zgw > zm(1) + zm(2) && zgw <= zm(1) + zm(2) + zm(3)
         wa3 = (wa3_unsat * (zgw - zm(1) - zm(2)) + theta_sat * (zm(1) + zm(2) + zm(3) - zgw)) / zm(3);
-    elseif zgw > zm(1) && zgw < zm(1) + zm(2)
+    elseif zgw > zm(1) && zgw <= zm(1) + zm(2)
         wa2 = (wa2 * (zgw - zm(1)) + theta_sat * (zm(1) + zm(2) - zgw)) / zm(2);
         wa3 = theta_sat;
-    elseif zgw > 0 && zgw < zm(1)
+    elseif zgw > 0 && zgw <= zm(1)
         wa1 = (wa1 * zgw + theta_sat * (zm(1) - zgw)) / zm(1);
         wa2 = theta_sat;
         wa3 = theta_sat;

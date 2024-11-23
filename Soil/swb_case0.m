@@ -72,17 +72,17 @@ function [wa, zgw, Tr, Es, uex] = swb_case0(wa, IWS, pEc, pEs, s_tem, s_vod, ...
         wa1 = theta_fc;
         wa2 = theta_fc;
         wa3 = theta_fc;
-    elseif zgw > zm(1) + zm(2) && zgw < zm(1) + zm(2) + zm(3)
+    elseif zgw > zm(1) + zm(2) && zgw <= zm(1) + zm(2) + zm(3)
         wa1 = theta_fc;
         wa2 = theta_fc;
         wa3 = (theta_fc * (zgw - zm(1) - zm(2)) + theta_sat * ...
             (zm(1) + zm(2) + zm(3) - zgw)) / zm(3); % 水面之下饱和、落水之上fc
-    elseif zgw > zm(1) && zgw < zm(1) + zm(2)
+    elseif zgw > zm(1) && zgw <= zm(1) + zm(2)
         wa1 = theta_fc;
         wa2 = (theta_fc * (zgw - zm(1)) + theta_sat * (zm(1) + ...
             zm(2) - zgw)) / zm(2);
         wa3 = theta_sat;
-    elseif zgw > 0 && zgw < zm(1)
+    elseif zgw > 0 && zgw <= zm(1)
         wa1 = (theta_fc * zgw + theta_sat * (zm(1) - zgw)) / zm(1);
         wa2 = theta_sat;
         wa3 = theta_sat;
